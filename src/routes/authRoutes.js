@@ -1,11 +1,11 @@
-// authRoutes.js
-
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController'); // Adjust the path as necessary
+const validInfo = require('../middleware/validInfo')
+const authorization = require('../middleware/authorization')
+const authController = require('../controllers/authController');
 
-router.post('/register', authController.registerUser);
-router.post('/login', authController.loginUser);
-router.post('/verify', authController.verifyUser);
+router.post('/register', validInfo, authController.registerUser);
+router.post('/login', validInfo, authController.loginUser);
+router.post('/verify', authorization, authController.verifyUser);
 
 module.exports = router;
