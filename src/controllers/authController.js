@@ -37,9 +37,9 @@ const authController = {
     // Login User
     async loginUser(req, res) {
         try {
-            const {email, password} = req.body;
+            const { email, password } = req.body;
 
-            // Check if user doesn't exist (if not then throw error)
+            // Check if user exists
             const user = await prisma.users.findUnique({
                 where: {
                     email: email
@@ -47,18 +47,18 @@ const authController = {
             });
 
             if (!user) {
-                return res.status(401).json({message: 'Invalid Credentials'});
+                return res.status(401).json({ message: 'Invalid Credentials' });
             }
 
             // Check if incoming password is the same as the database password
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) {
-                return res.status(401).json({message: 'Invalid Credentials'});
+                return res.status(401).json({ message: 'Invalid Credentials' });
             }
 
             // Create and assign a jwt token
             const token = jwtGenerator(user.id);
-            res.json({token});
+            res.json({ token });
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server error');
