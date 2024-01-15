@@ -1,69 +1,35 @@
-const bcrypt = require('bcrypt');
-const pool = require('../config/dbConfig');
-const {PrismaClient, User, users} = require('@prisma/client');
-const jwtGenerator = require('../utils/jwtGenerator');
-
-const prisma = new PrismaClient();
+const authService = require('../services/authService');
 
 const authController = {
+
     // Register User
     async registerUser(req, res) {
         try {
-            const {email, password} = req.body;
-            const hashedPassword = await bcrypt.hash(password, 10); // Hashing the password
-
-            // Add user to the database
-            const newUser = await prisma.users.create({
-                data: {
-                    email: email,
-                    password: hashedPassword
-                }
-            });
-
-            // Exclude the password from the response for security
-            const {password: _, ...userWithoutPassword} = newUser;
-
-            res.json(userWithoutPassword);
-        } catch (err) {
-            console.error(err.message);
-            // Handle unique constraint violation
-            if (err.code === "P2002") {
-                return res.status(409).send("Email already exists");
-            }
-            res.status(500).send('Server error');
+            const user = await authService.registerUser(req.body.email, req.body.password);
+            res.json(user);
+        } catch (error) {
+            res.status(500).send(error.message);
         }
     },
 
     // Login User
     async loginUser(req, res) {
         try {
-            const { email, password } = req.body;
+            const { user, token } = await authService.loginUser(req.body.email, req.body.password);
 
-            // Check if user exists
-            const user = await prisma.users.findUnique({
-                where: {
-                    email: email
-                }
-            });
+            // Optionally exclude sensitive information from the user object
+            const { password: _, ...userWithoutPassword } = user;
 
-            if (!user) {
-                return res.status(401).json({ message: 'Invalid Credentials' });
+            res.json({ user: userWithoutPassword, token });
+        } catch (error) {
+            // Adjust the status code and response based on the error type
+            if (error.message === 'User not found' || error.message === 'Invalid credentials') {
+                return res.status(401).json({ message: error.message });
             }
-
-            // Check if incoming password is the same as the database password
-            const validPassword = await bcrypt.compare(password, user.password);
-            if (!validPassword) {
-                return res.status(401).json({ message: 'Invalid Credentials' });
-            }
-
-            // Create and assign a jwt token
-            const token = jwtGenerator(user.id);
-            res.json({ token });
-        } catch (err) {
-            console.error(err.message);
             res.status(500).send('Server error');
         }
     },
+
 
     // Verify User
     async verifyUser(req, res) {
