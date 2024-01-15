@@ -18,18 +18,11 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
 const chatPipeline = promptTemplate.pipe(chatModel);
 
 const chatGptService = {
-    // Async function to generate a response from the ChatGPT model
-    async generateResponse(userInput) {
+    generateResponse: async (userInput) => {
         try {
-            // Invoke the chat pipeline with the user's input and get the response
-            const response = await chatPipeline.invoke({
-                input: userInput,
-            });
-
-            console.log(response);
+            const response = await chatPipeline.invoke({input: userInput});
             return response.content;
         } catch (error) {
-            // Log and handle errors (e.g., network issues, invalid API key)
             console.error('Error in getting response:', error);
             return null;
         }

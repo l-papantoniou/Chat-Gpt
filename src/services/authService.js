@@ -18,7 +18,7 @@ const authService = {
         });
 
         // Exclude password from the returned user object
-        const { password: _, ...userWithoutPassword } = newUser;
+        const {password: _, ...userWithoutPassword} = newUser;
 
         return userWithoutPassword;
     },
@@ -44,7 +44,7 @@ const authService = {
         // Generate a JWT token
         const token = jwtGenerator(user.id);
 
-        return { user, token };
+        return {user, token};
     },
 
 };
