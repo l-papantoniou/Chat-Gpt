@@ -9,17 +9,17 @@ datasource db {
 
 model users {
   id             Int              @id @default(autoincrement())
-  email          String           @db.VarChar(255) @unique
+  email          String           @db.VarChar(255)
   password       String           @db.VarChar(255)
   hotelcompanies hotelcompanies[]
 }
 
 model hotelcompanies {
-  id       Int     @id @default(autoincrement())
-  name     String? @db.VarChar(200)
-  location String? @db.VarChar(200)
-  type     String? @db.VarChar(100)
-  hotelier Int?
-  assets   Json?
-  users    users?  @relation(fields: [hotelier], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          Int     @id @default(autoincrement())
+  name        String? @db.VarChar(100)
+  location    String? @db.VarChar(100)
+  description String?
+  hotelier    Int?
+  assets      Json?
+  users       users?  @relation(fields: [hotelier], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
