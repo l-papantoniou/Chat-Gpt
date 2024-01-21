@@ -17,8 +17,8 @@ const hotelCompaniesController = {
      */
     createCompany: async (req, res) => {
         try {
-            const {name, location, type, hotelier, assets} = req.body;
-            const newCompany = await hotelCompaniesService.createCompany(name, location, type, hotelier, assets);
+            const {name, location, description, type, hotelier, assets} = req.body;
+            const newCompany = await hotelCompaniesService.createCompany(name, location, description, type, hotelier, assets);
             res.status(201).json(newCompany);
         } catch (error) {
             res.status(500).json({message: error.message});

@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 const hotelCompaniesService = {
 
-    createCompany: async (name, location, type, hotelier, assets) => {
+    createCompany: async (name, location, description, type, hotelier, assets) => {
         return prisma.hotelcompanies.create({
-            data: {name, location, type, hotelier, assets}
+            data: {name, location, description, type, hotelier, assets}
         });
     },
 
