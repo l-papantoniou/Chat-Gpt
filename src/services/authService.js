@@ -5,27 +5,27 @@ const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const authService = {
-    async registerUser(email, password) {
+    async registerUser(username, email, password) {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Add user to the database
         const newUser = await prisma.users.create({
             data: {
+                username: username,
                 email: email,
                 password: hashedPassword
             }
         });
 
-        // Exclude password from the returned user object
-        const {password: _, ...userWithoutPassword} = newUser;
+        const token = jwtGenerator(newUser.id);
 
-        return userWithoutPassword;
+        return {newUser, token};
     },
 
     async loginUser(email, password) {
         // Check if user exists
-        const user = await prisma.users.findUnique({
+        const user = await prisma.users.findFirst({
             where: {
                 email: email
             }

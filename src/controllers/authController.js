@@ -5,7 +5,7 @@ const authController = {
     // Register User
     async registerUser(req, res) {
         try {
-            const user = await authService.registerUser(req.body.email, req.body.password);
+            const user = await authService.registerUser(req.body.username, req.body.email, req.body.password);
             res.json(user);
         } catch (error) {
             res.status(500).send(error.message);
