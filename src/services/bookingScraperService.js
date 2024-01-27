@@ -75,6 +75,16 @@ const bookingScraperService = {
             return amenities.length > 0 ? amenities[0].textContent : null;
         });
 
+        const type = await page.evaluate(() => {
+
+            const hotelTypes = ["hotel", "boutique", "resort", "hostel", "inn", "B&B", "luxury", "budget", "apartment"];
+
+            let types = hotelTypes.filter(type => description.toLowerCase().includes(type));
+
+            return type.length > 0 ? type : null
+
+        });
+
 
         // // Extract amenities and services
         //
@@ -92,7 +102,7 @@ const bookingScraperService = {
 
         await browser.close()
 
-        return {name, description, location, highlights, amenities};
+        return {name, description, location, highlights, amenities, type};
     }
 
 }

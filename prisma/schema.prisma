@@ -10,7 +10,7 @@ datasource db {
 model users {
   id             Int              @id @default(autoincrement())
   username       String           @db.VarChar(255)
-  email          String           @unique @db.VarChar(255)
+  email          String           @db.VarChar(255)
   password       String           @db.VarChar(255)
   hotelcompanies hotelcompanies[]
 }
@@ -20,6 +20,7 @@ model hotelcompanies {
   name        String? @db.VarChar(100)
   location    String? @db.VarChar(100)
   description String?
+  type        String? @db.VarChar(100)
   hotelier    Int?
   assets      Json?
   users       users?  @relation(fields: [hotelier], references: [id], onDelete: NoAction, onUpdate: NoAction)

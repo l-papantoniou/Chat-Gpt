@@ -15,16 +15,16 @@ const authController = {
     // Login User
     async loginUser(req, res) {
         try {
-            const { user, token } = await authService.loginUser(req.body.email, req.body.password);
+            const {user, token} = await authService.loginUser(req.body.email, req.body.password);
 
             // Optionally exclude sensitive information from the user object
-            const { password: _, ...userWithoutPassword } = user;
+            const {password: _, ...userWithoutPassword} = user;
 
-            res.json({ user: userWithoutPassword, token });
+            res.json({user: userWithoutPassword, token});
         } catch (error) {
             // Adjust the status code and response based on the error type
             if (error.message === 'User not found' || error.message === 'Invalid credentials') {
-                return res.status(401).json({ message: error.message });
+                return res.status(401).json({message: error.message});
             }
             res.status(500).send('Server error');
         }
@@ -35,7 +35,7 @@ const authController = {
     async verifyUser(req, res) {
         try {
             // Assuming the user is already verified by the 'authorization' middleware
-            res.json({message: 'User is verified', user: req.user});
+            res.status(200).json({message: 'User is verified', user: req.user});
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server error');

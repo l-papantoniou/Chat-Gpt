@@ -18,7 +18,10 @@ const authService = {
             }
         });
 
-        const token = jwtGenerator(newUser.id);
+        const token = jwtGenerator(newUser.id, newUser.username);
+
+        // Exclude password from the returned user object
+        const { password: _, ...userWithoutPassword } = newUser;
 
         return {newUser, token};
     },
@@ -42,7 +45,9 @@ const authService = {
         }
 
         // Generate a JWT token
-        const token = jwtGenerator(user.id);
+        const token = jwtGenerator(user.id, user.username);
+
+        const { password: _, ...userWithoutPassword } = user;
 
         return {user, token};
     },
