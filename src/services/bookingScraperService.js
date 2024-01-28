@@ -69,11 +69,15 @@ const bookingScraperService = {
         });
 
         const type = await page.evaluate((description) => {
-            const hotelTypes = ["hotel", "house", "suites", "boutique", "resort", "hostel", "inn", "B&B", "luxury", "budget", "apartment"];
+            const capitalizeFirstLetter = (string) => {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            };
+
+            const hotelTypes = ["hotel", "suites", "boutique", "resort", "hostel", "inn", "B&B", "luxury", "budget", "apartment"];
 
             let type = hotelTypes.find(type => description.toLowerCase().includes(type));
 
-            return type || null; // Return the type or null if none is found
+            return type ? capitalizeFirstLetter(type) : null;
         }, description); // Pass description as an argument here
 
         await browser.close()
