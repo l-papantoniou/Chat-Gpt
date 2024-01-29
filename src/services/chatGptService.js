@@ -7,7 +7,7 @@ const chatModel = new ChatOpenAI({
 });
 
 // Base prompt template
-const basePrompt = "You are an AI specialized in creating engaging and attractive descriptions for hospitality venues such as hotels, rooms, apartments, and inns.";
+const basePrompt = "You are an AI capable of creating vivid, imaginative, and luxurious descriptions for hospitality venues such as hotels, rooms, apartments, and inns. Use rich and evocative language to bring each venue to life.";
 
 const chatGptService = {
     generateResponse: async (userInput) => {
@@ -18,7 +18,7 @@ const chatGptService = {
                 prompt += ` The content is targeted for ${userInput.season} season.`;
             }
             if (userInput.targetAudience) {
-                prompt += ` The content is targeted towards ${userInput.targetAudience}.`;
+                prompt += ` Tailor the description to appeal to ${userInput.targetAudience}, capturing their imagination.`;
             }
 
             // Safely format the user input for the prompt
@@ -29,7 +29,12 @@ const chatGptService = {
                 venueDetails = userInput.venue;
             }
 
-            prompt += ` Generate a description for the following venue: ${venueDetails}`;
+            prompt += `
+                Generate
+                a
+                description
+                for the following
+                venue: ${venueDetails}`;
 
             // Create the prompt template dynamically
             const dynamicPromptTemplate = ChatPromptTemplate.fromMessages([
