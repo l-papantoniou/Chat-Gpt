@@ -52,7 +52,31 @@ const chatGptService = {
             console.error('Error in getting response:', error);
             return null;
         }
+    },
+
+    translateContent: async (userInput) => {
+        try {
+            // Construct the prompt for translation
+            let prompt = `You are a fluent ${userInput.targetLanguage} speaker and an expert in tourist accommodations, including hotels, apartments, and inns. Your task is to translate the following English description into ${userInput.targetLanguage}, ensuring that the translation is natural, culturally appropriate, and fully captures the charm and appeal of the accommodation. This is the accommodation description ${userInput.description} `;
+
+            const dynamicPromptTemplate = ChatPromptTemplate.fromMessages([
+                ["system", prompt],
+                ["user", ""]
+            ]);
+
+            // Chain the prompt template with the ChatOpenAI model
+            const dynamicChatPipeline = dynamicPromptTemplate.pipe(chatModel);
+
+            const response = await dynamicChatPipeline.invoke({input: ""});
+
+            // Return the translated text
+            return response.content;
+        } catch (error) {
+            console.error('Error in translating to Greek:', error);
+            return "Translation error occurred.";
+        }
     }
+
 };
 
 // Export the chatGptService for use in other parts of the application
