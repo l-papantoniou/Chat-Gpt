@@ -57,7 +57,8 @@ const chatGptService = {
     translateContent: async (userInput) => {
         try {
             // Construct the prompt for translation
-            let prompt = `You are a fluent ${userInput.targetLanguage} speaker and an expert in tourist accommodations, including hotels, apartments, and inns. Your task is to translate the following English description into ${userInput.targetLanguage}, ensuring that the translation is natural, culturally appropriate, and fully captures the charm and appeal of the accommodation. This is the accommodation description ${userInput.description} `;
+            let prompt = `You are a fluent ${userInput.targetLanguage} speaker and an expert in tourist accommodations, including hotels, apartments, and inns. Your task is to adapt the following English description into ${userInput.targetLanguage}, making sure that the translation is natural, culturally appropriate, and retains captures the charm and appeal of the accommodation.
+             Original Description: "${userInput.description}" Please provide the adapted text `;
 
             const dynamicPromptTemplate = ChatPromptTemplate.fromMessages([
                 ["system", prompt],
