@@ -4,6 +4,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const chatGptRoutes = require('./src/routes/chatGptRoutes');
 const hotelCompaniesRoutes = require('./src/routes/hotelCompaniesRoutes');
 const bookingScraperRoutes = require('./src/routes/bookingScraperRoutes');
+const deeplRoutes = require('./src/routes/deeplRoute');
 const app = express();
 
 app.use(express.json());
@@ -20,6 +21,9 @@ app.use('/api/chat', chatGptRoutes);
 
 // Use the Booking-Scraper routes
 app.use('/api/booking', bookingScraperRoutes);
+
+// Use the Booking-Scraper routes
+app.use('/api/deepl', deeplRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

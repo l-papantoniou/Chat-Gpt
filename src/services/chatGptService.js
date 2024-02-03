@@ -7,7 +7,7 @@ const chatModel = new ChatOpenAI({
 });
 
 // Base prompt template
-const basePrompt = "You are an AI capable of creating vivid, imaginative, and luxurious descriptions for hospitality venues such as hotels, rooms, apartments, and inns. Use rich and evocative language to bring each venue to life.";
+const basePrompt = "You are an AI capable of creating vivid, imaginative, descriptions for hospitality venues such as hotels, rooms, apartments, and inns. Use rich and evocative language to bring each venue to life.";
 
 const chatGptService = {
     generateResponse: async (userInput) => {
@@ -57,7 +57,7 @@ const chatGptService = {
     translateContent: async (userInput) => {
         try {
             // Construct the prompt for translation
-            let prompt = `You are a fluent ${userInput.targetLanguage} speaker and an expert in tourist accommodations, including hotels, apartments, and inns. Your task is to adapt the following English description into ${userInput.targetLanguage}, making sure that the translation is natural, culturally appropriate, and retains captures the charm and appeal of the accommodation.
+            let prompt = `You are a fluent ${userInput.targetLanguage} speaker and an expert in tourist accommodations, including hotels, apartments, and inns. Your task is to adapt the following English description into ${userInput.targetLanguage}, making sure that the translation is natural, culturally appropriate, and retains the charm and appeal of the accommodation.
              Original Description: "${userInput.description}" Please provide the adapted text `;
 
             const dynamicPromptTemplate = ChatPromptTemplate.fromMessages([
