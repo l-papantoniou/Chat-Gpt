@@ -7,7 +7,7 @@ const chatGptController = {
 
             // Validate the input
             if (!payload.venue) {
-                return res.status(400).json({message: 'Venue is required'});
+                return res.status(400).json({message: 'A tourist accommodation is required!'});
             }
 
             // Call the ChatGPT service to get a response

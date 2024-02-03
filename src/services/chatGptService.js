@@ -7,34 +7,36 @@ const chatModel = new ChatOpenAI({
 });
 
 // Base prompt template
-const basePrompt = "You are an AI capable of creating vivid, imaginative, descriptions for hospitality venues such as hotels, rooms, apartments, and inns. Use rich and evocative language to bring each venue to life.";
+const basePrompt = "You are an AI capable of creating vivid, imaginative, descriptions for tourist accommodation such as hotels, rooms, apartments, and inns. Use rich and evocative language to bring each venue to life.";
+
+// Helper function to define content length instructions
+const getContentLengthInstruction = (length) => {
+    switch (length) {
+        case "short":
+            return "Provide a brief overview, up to five sentences";
+        case "medium":
+            return "Provide a detailed paragraph with up to ten sentences";
+        case "long":
+            return "Provide an extensive description with multiple paragraphs, covering all aspects in detail";
+        default:
+            return "Provide a standard length description, about three sentences.";
+    }
+}
+
 
 const chatGptService = {
     generateResponse: async (userInput) => {
         try {
-            let prompt = basePrompt;
 
-            if (userInput.season) {
-                prompt += ` The content is targeted for ${userInput.season} season.`;
-            }
-            if (userInput.targetAudience) {
-                prompt += ` Tailor the description to appeal to ${userInput.targetAudience}, capturing their imagination.`;
-            }
+            // Construct the refined prompt with mandatory user inputs
+            let prompt = `${basePrompt} 
+            The description is targeted for the ${userInput.season} season, aiming to appeal specifically to ${userInput.targetAudience}. 
+            The key selling point to highlight is ${userInput.sellingPoint}. 
+            The desired content length is ${getContentLengthInstruction(userInput.contentLength)}, indicating the level of detail and depth required. 
+            Based on these inputs, generate a detailed and engaging description for the venue: ${JSON.stringify(userInput.venue).replace(/[{}]/g, '')}`;
 
-            // Safely format the user input for the prompt
-            let venueDetails = "";
-            if (typeof userInput.venue === 'object') {
-                venueDetails = JSON.stringify(userInput.venue).replace(/[{}]/g, ''); // Remove curly braces from JSON string
-            } else if (typeof userInput.venue === 'string') {
-                venueDetails = userInput.venue;
-            }
 
-            prompt += `
-                Generate
-                a
-                description
-                for the following
-                venue: ${venueDetails}`;
+            console.log(prompt);
 
             // Create the prompt template dynamically
             const dynamicPromptTemplate = ChatPromptTemplate.fromMessages([
