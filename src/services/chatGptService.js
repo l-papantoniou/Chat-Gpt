@@ -1,7 +1,6 @@
 const {ChatOpenAI} = require("@langchain/openai");
 const {ChatPromptTemplate} = require("@langchain/core/prompts");
 
-// Initialize the ChatGPT model with the OpenAI API key
 const chatModel = new ChatOpenAI({
     openAIApiKey: process.env.CHATGPT_API_KEY,
 });
@@ -13,13 +12,17 @@ const basePrompt = "You are an AI capable of creating vivid, imaginative, descri
 const getContentLengthInstruction = (length) => {
     switch (length) {
         case "short":
-            return "Provide a brief overview, up to five sentences";
+            // Directly specifies the structure and total sentence count for clarity.
+            return "Provide a brief overview in 1-2 short paragraphs, totaling no more than 5 sentences. Focus on conciseness and highlight only the most compelling aspect of the accommodation.";
         case "medium":
-            return "Provide a detailed paragraph with up to ten sentences";
+            // Clarifies the expected structure in terms of paragraphs and sentences per paragraph.
+            return "Provide a detailed description in 2-3 paragraphs, with each paragraph consisting of 3-5 sentences. Cover key features and experiences that the accommodation offers, balancing detail with readability.";
         case "long":
-            return "Provide an extensive description with multiple paragraphs, covering all aspects in detail";
+            // Specifies a more extensive structure, encouraging depth and detail.
+            return "Provide an extensive and detailed description in 4 or more paragraphs, each containing 4-6 sentences. Explore all aspects of the accommodation in detail, including amenities, atmosphere, and unique selling points.";
         default:
-            return "Provide a standard length description, about three sentences.";
+            // Offers a balanced default option.
+            return "Provide a standard length description in 2 paragraphs, each with 3-4 sentences. Give a well-rounded view of the accommodation, including its main attractions and ambiance.";
     }
 }
 
@@ -27,14 +30,12 @@ const getContentLengthInstruction = (length) => {
 const chatGptService = {
     generateResponse: async (userInput) => {
         try {
-
             // Construct the refined prompt with mandatory user inputs
             let prompt = `${basePrompt} 
             The description is targeted for the ${userInput.season} season, aiming to appeal specifically to ${userInput.targetAudience}. 
             The key selling point to highlight is ${userInput.sellingPoint}. 
-            The desired content length is ${getContentLengthInstruction(userInput.contentLength)}, indicating the level of detail and depth required. 
-            Based on these inputs, generate a detailed and engaging description for the venue: ${JSON.stringify(userInput.venue).replace(/[{}]/g, '')}`;
-
+            The desired content length is ${getContentLengthInstruction(userInput.contentLength)}. 
+            Based on these inputs, generate an engaging description for the following tourist accommodation: ${JSON.stringify(userInput.venue).replace(/[{}]/g, '')}`;
 
             console.log(prompt);
 
